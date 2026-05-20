@@ -44,7 +44,6 @@ const AddNote = ({ onAddNote }: Props) => {
                     <Text style={styles.label}>Заголовок</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Введите заголовок"
                         value={title}
                         onChangeText={setTitle}
                     />
@@ -52,7 +51,6 @@ const AddNote = ({ onAddNote }: Props) => {
                     <Text style={styles.label}>Текст заметки</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Введите текст"
                         value={text}
                         onChangeText={setText}
                     />

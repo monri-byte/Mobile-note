@@ -25,11 +25,15 @@ const App = () => {
         setNotes([...notes, newNote]);
     };
 
+    const deleteNote = (id: string) => {
+        setNotes(notes.filter(note => note.id !== id));
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Заметки</Text>
             <AddNote onAddNote={addNote} />
-            <NotesList notes={notes} />
+            <NotesList notes={notes} onDeleteNote={deleteNote} />
         </View>
     );
 };

@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     FlatList,
+    TouchableOpacity,
 } from 'react-native';
 
 type Note = {
@@ -14,15 +15,25 @@ type Note = {
 
 type Props = {
     notes: Note[];
+    onDeleteNote: (id: string) => void;
 };
 
-const NotesList = ({ notes }: Props) => {
+const NotesList = ({ notes, onDeleteNote }: Props) => {
     const renderNote = ({ item }: { item: Note }) => (
         <View style={styles.noteCard}>
-            <Text style={styles.noteTitle}>{item.title}</Text>
-            <Text style={styles.noteContent}>{item.content}</Text>
+            <View style={styles.noteContent}>
+                <Text style={styles.noteTitle}>{item.title}</Text>
+                <Text style={styles.noteText}>{item.content}</Text>
+            </View>
+            <TouchableOpacity 
+                style={styles.deleteButton} 
+                onPress={() => onDeleteNote(item.id)}
+            >
+                <Text style={styles.deleteButtonText}>Удалить</Text>
+            </TouchableOpacity>
         </View>
     );
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Список заметок</Text>
@@ -53,11 +64,18 @@ const styles = StyleSheet.create({
     },
     noteCard: {
         backgroundColor: 'white',
-        padding: 15,
+        padding: 10,
         borderRadius: 10,
         marginBottom: 12,
         borderWidth: 1,
         borderColor: '#dbdbdb',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    noteContent: {
+        flex: 1,
+        marginRight: 10,
     },
     noteTitle: {
         fontSize: 18,
@@ -65,7 +83,7 @@ const styles = StyleSheet.create({
         color: 'black',
         marginBottom: 8,
     },
-    noteContent: {
+    noteText: {
         fontSize: 14,
         color: 'black',
     },
@@ -74,6 +92,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         marginTop: 50,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        paddingHorizontal: 15,
+        paddingVertical: 8,
+        borderRadius: 8,
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 });
 
