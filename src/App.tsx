@@ -4,11 +4,13 @@ import {
     Text,
     StyleSheet,
 } from 'react-native';
+import AddNote from './AddNote';
 
 const App = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Заметки</Text>
+            <AddNote />
         </View>
     );
 };
