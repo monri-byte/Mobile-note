@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
     StyleSheet,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddNote from './AddNote';
 import NotesList from './NotesList';
 
@@ -16,17 +17,46 @@ type Note = {
 const App = () => {
     const [notes, setNotes] = useState<Note[]>([]);
 
+    useEffect(() => {
+        loadNotes();
+    }, []);
+
+    useEffect(() => {
+        saveNotes();
+    }, [notes]);
+
+    const loadNotes = async () => {
+        const savedNotes = await AsyncStorage.getItem('notes');
+        if (savedNotes !== null) {
+            setNotes(JSON.parse(savedNotes));
+        }
+    };
+
+    const saveNotes = async () => {
+        await AsyncStorage.setItem('notes', JSON.stringify(notes));
+    };
+
     const addNote = (title: string, content: string) => {
         const newNote: Note = {
             id: Date.now().toString(),
             title,
             content,
         };
-        setNotes([...notes, newNote]);
+        const newNotes: Note[] = [newNote];
+        notes.forEach(function(note: Note) {
+            newNotes.push(note);
+        });
+        setNotes(newNotes);
     };
 
     const deleteNote = (id: string) => {
-        setNotes(notes.filter(note => note.id !== id));
+        const filteredNotes: Note[] = [];
+        notes.forEach(function(note: Note) {
+            if (note.id !== id) {
+                filteredNotes.push(note);
+            }
+        });
+        setNotes(filteredNotes);
     };
 
     return (
