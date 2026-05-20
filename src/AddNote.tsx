@@ -7,14 +7,35 @@ import {
     Text,
 } from 'react-native';
 
-const AddNote = () => {
+type Props = {
+    onAddNote: (title: string, content: string) => void;
+};
+
+const AddNote = ({ onAddNote }: Props) => {
     const [showForm, setShowForm] = useState(false);
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
 
+    const handleToggleForm = () => {
+        setShowForm(!showForm);
+        if (!showForm) {
+            setTitle('');
+            setText('');
+        }
+    };
+
+    const handleSubmit = () => {
+        if (title.trim() && text.trim()) {
+            onAddNote(title, text);
+            setTitle('');
+            setText('');
+            setShowForm(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.addButton} onPress={() => setShowForm(true)}>
+            <TouchableOpacity style={styles.addButton} onPress={handleToggleForm}>
                 <Text style={styles.addButtonText}>Добавить</Text>
             </TouchableOpacity>
 
@@ -23,16 +44,20 @@ const AddNote = () => {
                     <Text style={styles.label}>Заголовок</Text>
                     <TextInput
                         style={styles.input}
+                        placeholder="Введите заголовок"
                         value={title}
                         onChangeText={setTitle}
                     />
+
                     <Text style={styles.label}>Текст заметки</Text>
                     <TextInput
                         style={styles.input}
+                        placeholder="Введите текст"
                         value={text}
                         onChangeText={setText}
                     />
-                    <TouchableOpacity style={styles.submitButton}>
+
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                         <Text style={styles.submitButtonText}>Подтвердить</Text>
                     </TouchableOpacity>
                 </View>
@@ -40,6 +65,7 @@ const AddNote = () => {
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -61,15 +87,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 15,
         marginBottom: 5,
-        color: '#333',
+        color: 'black',
     },
     input: {
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: 'gray',
         padding: 12,
         borderRadius: 8,
         fontSize: 16,
-        backgroundColor: '#fff',
+        backgroundColor: 'white',
     },
     submitButton: {
         backgroundColor: 'blue',
